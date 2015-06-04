@@ -98,8 +98,8 @@ public class Login_Zhihu {
 	}
 	
 	public static void main(String[] args) {
-		String email = "liyongyuea@126.com";
-		String password = "a403270940";
+		String email = "";
+		String password = "";
 		login(email,password);
 		Content content = protocol.getOutput("http://www.zhihu.com/question/20248668");
 		System.out.println(content.getContentString());
