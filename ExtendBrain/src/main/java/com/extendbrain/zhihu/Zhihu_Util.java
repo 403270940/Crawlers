@@ -74,6 +74,18 @@ public class Zhihu_Util {
 		return html;
 	}
 	
+	public static boolean findIfMore(String html){
+		boolean ifMore = false;
+		Document doc = Jsoup.parse(html);
+		String ifMoreTag = ".zu-button-more";
+		Elements ifMoreElements = doc.select(ifMoreTag);
+		if (ifMoreElements.size() > 0) {
+			ifMore = true;
+		}
+		return ifMore;
+	}
+	
+	//zu-button-more
 	public static List<Answer> getAllAnswerFromQuestionPage(String html){
 		List<Answer> answerList = new ArrayList<Answer>();
 		Document doc = Jsoup.parse(html);
@@ -144,8 +156,8 @@ public class Zhihu_Util {
 	}
 	
 	public static void main(String[] args) {
-		String email = "liyongyuea@126.com";
-		String password = "a403270940";
+		String email = "";
+		String password = "";
 		Login_Zhihu.login(email,password);
 //		String questionId = "27621722";
 //		String questionHtml = getQuestion(questionId);
