@@ -18,6 +18,11 @@ import org.jsoup.select.Elements;
 import com.extendbrain.beans.Content;
 import com.extendbrain.protocol.Protocol;
 import com.extendbrain.protocol.ProtocolFactory;
+import com.extendbrain.utils.ConfigUtil;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 /*
  * more http://www.zhihu.com/node/QuestionAnswerListV2
  * post :
@@ -38,11 +43,25 @@ public class Zhihu_Util {
 		return html;
 	}
 	
-	public static String getQuestionJson(String id){
+	private static String processJsonResult(String html){
+		Gson gson = new Gson();
+		JsonObject jsonObject = new JsonParser().parse(html).getAsJsonObject();
+		JsonArray jsonArray = jsonObject.getAsJsonArray("msg");
+		html = jsonArray.toString();
+		html = html.substring(2);
+		html = html.substring(0, html.length()-2);
+		html = html.replace("\\\"", "\"");
+		html = html.replace("\\/", "/");
+		html = html.replace("\\n", "");
+		html = "<html>" + "<body>" +html + "</body>" + "</html>";
+		return html;
+	}
+	
+	public static String getQuestionJson(String id,int offset,int count){
 		String url = "http://www.zhihu.com/node/QuestionAnswerListV2";
 		String xsrf = Login_Zhihu.xsrf;
-		String count = "50";
-		String offset = "50";
+		String totalCount = String.valueOf(count);
+		String currentOffset = String.valueOf(offset);
 		String method = "next";
 		String params = "{\"url_token\":" + id + ",\"pagesize\":" + count + ",\"offset\":" + offset + "}";
 		List<NameValuePair> paramsList = new ArrayList<NameValuePair>();
@@ -53,7 +72,6 @@ public class Zhihu_Util {
 		System.out.println(params);
 		HttpPost post = new HttpPost(url);
 		post.setHeader("Accept", "*/*");
-		post.setHeader("Accept-Encoding", "gzip, deflate");
 		post.setHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
 		post.setHeader("Cache-Control", "no-cache");
 		post.setHeader("Connection", "keep-alive");
@@ -70,27 +88,24 @@ public class Zhihu_Util {
 		}
 		Content content = protocol.postOutput(post);
 		String html = content.getContentString();
-		Login_Zhihu.updateXsrf(html);
+		html = processJsonResult(html);
 		return html;
 	}
 	
-	public static boolean findIfMore(String html){
-		boolean ifMore = false;
-		Document doc = Jsoup.parse(html);
-		String ifMoreTag = ".zu-button-more";
-		Elements ifMoreElements = doc.select(ifMoreTag);
-		if (ifMoreElements.size() > 0) {
-			ifMore = true;
-		}
-		return ifMore;
+	public static int getAnswerCount(String html){
+		Document doc = Jsoup.parse(html);		
+		String ifMoreTag = "#zh-question-answer-num";
+		String answerCount = doc.select(ifMoreTag).first().attr("data-num");
+		return Integer.valueOf(answerCount.trim());
 	}
+
 	
 	//zu-button-more
-	public static List<Answer> getAllAnswerFromQuestionPage(String html){
+	public static List<Answer> getAnswerFromQuestionPage(String html){
 		List<Answer> answerList = new ArrayList<Answer>();
 		Document doc = Jsoup.parse(html);
 	
-		String answerClassName = "div .zm-item-answer"; 
+		String answerClassName = ".zm-item-answer"; 
 		Elements answers = doc.select(answerClassName);
 		for(Element answer : answers ){
 			Answer ans = new Answer();
@@ -155,9 +170,35 @@ public class Zhihu_Util {
 		}
 	}
 	
+	public static List<Answer> getALLAnswerOfQuestion(String questionId){
+		List<Answer> answerList = new ArrayList<Answer>();
+		String html = getQuestion(questionId);
+		List<Answer> resultList = getAnswerFromQuestionPage(html);
+		answerList.addAll(resultList);
+		int answerCount = getAnswerCount(html);
+		
+		for(int i = 50; i < answerCount; i=i+50){
+			int offset = i;
+			int count = (answerCount - i) > 50? 50 : answerCount - i;
+			String jsonhtml = getQuestionJson(questionId,offset,count);
+			try {
+				String utfhtml = new String(jsonhtml.getBytes("unicode"),"utf-8");
+				System.out.println(jsonhtml);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			List<Answer> jsonList = getAnswerFromQuestionPage(jsonhtml);
+			answerList.addAll(jsonList);
+		}
+		return answerList;
+	}
+	
+	
 	public static void main(String[] args) {
-		String email = "";
-		String password = "";
+		String email = ConfigUtil.getProperty("zhihu_userName");
+		String password = ConfigUtil.getProperty("zhihu_password");
 		Login_Zhihu.login(email,password);
 //		String questionId = "27621722";
 //		String questionHtml = getQuestion(questionId);
@@ -167,13 +208,14 @@ public class Zhihu_Util {
 		while(true){
 			try {
 			String line = sc.nextLine();	
-//			System.out.println("line: " + line);
+			System.out.println("line: " + line);
 			int intid = Integer.valueOf(line.trim());
 			String id = String.valueOf(intid);
 			if(id.length()!=8)
 				throw new Exception("The id Length should be 8");
-			String html = getQuestion(id);
-			getAllAnswerFromQuestionPage(html);
+			//String html = getQuestion(id);
+			List<Answer> answerList = getALLAnswerOfQuestion(id);
+			System.out.println(answerList.size());
 //			getAllUserFromQuestionPage(html);
 //			System.out.println("id: " + id);
 //			Thread.sleep(1000);

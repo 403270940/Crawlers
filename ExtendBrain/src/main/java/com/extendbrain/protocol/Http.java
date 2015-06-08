@@ -190,6 +190,7 @@ public class Http implements Protocol{
 		Matcher m1 = p1.matcher(html);
 		if (m1.find())
 			return m1.group();
+		System.out.println(chs);
 		return chs;
 
 	}

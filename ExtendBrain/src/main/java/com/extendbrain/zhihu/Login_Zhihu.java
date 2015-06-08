@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 import com.extendbrain.beans.Content;
 import com.extendbrain.protocol.Protocol;
 import com.extendbrain.protocol.ProtocolFactory;
+import com.extendbrain.utils.ConfigUtil;
 
 public class Login_Zhihu {
 	/*
@@ -49,7 +50,7 @@ public class Login_Zhihu {
 	}
 	public static String updateXsrf(String html){
 		Document doc = Jsoup.parse(html);
-		Elements hidden = doc.select("[name=\"_xsrf\"]");
+		Elements hidden = doc.select("[name=_xsrf]");
 		Element element = hidden.first();
 		if(element == null) return null;
 		String xsrfString = element.attr("value");
@@ -92,14 +93,13 @@ public class Login_Zhihu {
 		
 		Content content = protocol.postOutput(post);
 		String result = content.getContentString();
-		System.out.println(result);
-		
-		
+		System.out.println(result);	
 	}
 	
 	public static void main(String[] args) {
-		String email = "";
-		String password = "";
+		
+		String email = ConfigUtil.getProperty("zhihu_userName");
+		String password = ConfigUtil.getProperty("zhihu_password");
 		login(email,password);
 		Content content = protocol.getOutput("http://www.zhihu.com/question/20248668");
 		System.out.println(content.getContentString());
