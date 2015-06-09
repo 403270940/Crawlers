@@ -43,20 +43,37 @@ public class Zhihu_Util {
 		return html;
 	}
 	
+	/*
+	 * 知乎的展示逻辑是：
+	 * 首先展示50条答案（如果答案数足够50的话）
+	 * 然后点击更多时，会再显示50条
+	 * 点击更多时会异步发起请求，获得json格式的结果，
+	 * 然而该结果是html标签的类型，接收了结果后会将其放到结果展示位置。
+	 * 所以我们需要把返回的结果进行处理，将其中的转换符号\n、\\等替换
+	 * 通过json库将返回结果中的unicode编码转换为相应的中文等
+	 */
 	private static String processJsonResult(String html){
 		Gson gson = new Gson();
+		//下面通过JSON库将结果中的unicode编码转换为相应的中文
 		JsonObject jsonObject = new JsonParser().parse(html).getAsJsonObject();
-		JsonArray jsonArray = jsonObject.getAsJsonArray("msg");
+		JsonArray jsonArray = jsonObject.getAsJsonArray("msg");//获得结果主体msg
 		html = jsonArray.toString();
-		html = html.substring(2);
-		html = html.substring(0, html.length()-2);
-		html = html.replace("\\\"", "\"");
-		html = html.replace("\\/", "/");
-		html = html.replace("\\n", "");
+		html = html.substring(2);//去除头部的["
+		html = html.substring(0, html.length()-2);//去除尾部的"]
+		html = html.replace("\\\"", "\"");//将\" 替换为"
+		html = html.replace("\\/", "/");//将\/ 替换为/
+		html = html.replace("\\n", "");//将\n" 替换为空
 		html = "<html>" + "<body>" +html + "</body>" + "</html>";
 		return html;
 	}
 	
+	/*
+	 * 该函数的作用是获得指定问题的从offset开始的count条数据
+	 * params:
+	 * id: 问题的ID
+	 * offset:问题答案的偏移
+	 * count:获得问题的个数
+	 */
 	public static String getQuestionJson(String id,int offset,int count){
 		String url = "http://www.zhihu.com/node/QuestionAnswerListV2";
 		String xsrf = Login_Zhihu.xsrf;
@@ -171,11 +188,20 @@ public class Zhihu_Util {
 	}
 	
 	public static List<Answer> getALLAnswerOfQuestion(String questionId){
+		
 		List<Answer> answerList = new ArrayList<Answer>();
+		
 		String html = getQuestion(questionId);
 		List<Answer> resultList = getAnswerFromQuestionPage(html);
 		answerList.addAll(resultList);
 		int answerCount = getAnswerCount(html);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		
 		for(int i = 50; i < answerCount; i=i+50){
 			int offset = i;
@@ -191,6 +217,12 @@ public class Zhihu_Util {
 			
 			List<Answer> jsonList = getAnswerFromQuestionPage(jsonhtml);
 			answerList.addAll(jsonList);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return answerList;
 	}

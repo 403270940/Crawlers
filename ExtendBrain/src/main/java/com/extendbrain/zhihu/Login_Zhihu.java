@@ -68,7 +68,6 @@ public class Login_Zhihu {
 		
 		HttpPost post = new HttpPost("http://www.zhihu.com/login");
 		post.setHeader("Accept", "*/*");
-//		post.setHeader("Accept-Encoding", "gzip, deflate");
 		post.setHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
 		post.setHeader("Cache-Control", "no-cache");
 		post.setHeader("Connection", "keep-alive");

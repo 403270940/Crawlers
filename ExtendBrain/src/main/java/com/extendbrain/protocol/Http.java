@@ -12,6 +12,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
@@ -95,6 +96,9 @@ public class Http implements Protocol{
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity entity = httpResponse.getEntity();
+			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			if(ifGZip)
+				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
 			content.setUrl(url);
 			content.setContent(contents);
@@ -117,6 +121,9 @@ public class Http implements Protocol{
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity entity = httpResponse.getEntity();
+			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			if(ifGZip)
+				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
 			content.setUrl(httpGet.getURI().toString());
 			content.setContent(contents);
@@ -140,6 +147,9 @@ public class Http implements Protocol{
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity entity = httpResponse.getEntity();
+			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			if(ifGZip)
+				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
 			content.setUrl(datum.getUrl());
 			content.setContent(contents);
@@ -161,6 +171,9 @@ public class Http implements Protocol{
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(post);
 			HttpEntity entity = httpResponse.getEntity();
+			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			if(ifGZip)
+				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
 			content.setUrl(post.getURI().toString());
 			content.setContent(contents);
@@ -178,19 +191,19 @@ public class Http implements Protocol{
 	}
 	private String getCharset(String html){
 		String chs = "utf-8";
-		Pattern p2 = Pattern.compile("(?<=charset=\")(.+)(?=\")");
+		Pattern p2 = Pattern.compile("(?<=charset=?\")(.+)(?=\")");
 		Matcher m2 = p2.matcher(html);
 		if (m2.find())
 			return m2.group();
-		Pattern p = Pattern.compile("(?<=charset=)(.+)(?=\")");
-		Matcher m = p.matcher(html);
-		if (m.find())
-			return m.group();
+//		Pattern p = Pattern.compile("(?<=charset=)(.+)(?=\")");
+//		Matcher m = p.matcher(html);
+//		if (m.find())
+//			return m.group();
 		Pattern p1 = Pattern.compile("(?<=encoding=\")(.+)(?=\")");
 		Matcher m1 = p1.matcher(html);
 		if (m1.find())
 			return m1.group();
-		System.out.println(chs);
+//		System.out.println(chs);
 		return chs;
 
 	}
