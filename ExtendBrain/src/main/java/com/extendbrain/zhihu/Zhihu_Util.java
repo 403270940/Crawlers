@@ -86,8 +86,8 @@ public class Zhihu_Util {
 		paramsList.add(new BasicNameValuePair("method", method));
 		paramsList.add(new BasicNameValuePair("params", params));
 		paramsList.add(new BasicNameValuePair("_xsrf", xsrf));
-		System.out.println(xsrf);
-		System.out.println(params);
+//		System.out.println(xsrf);
+//		System.out.println(params);
 		HttpPost post = new HttpPost(url);
 		post.setHeader("Accept", "*/*");
 		post.setHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
@@ -132,22 +132,26 @@ public class Zhihu_Util {
 			ans.setQuestionId(questionId);
 			ans.setUpCount(upCount);
 			ans.setAnswerId(id);
-			String commentsCountString = answer.select(".z-icon-comment").first().parent().text().trim();
-//			System.out.println("commentCount:"+commentsCountString);
-			if(!commentsCountString.equals("添加评论")){
-				int commentCount = Integer.valueOf(commentsCountString.split(" ")[0]);
-				ans.setComentCount(commentCount);
-			}
-					
+			try {
+				String commentsCountString = answer.select(".z-icon-comment").first().parent().text().trim();
+	//			System.out.println("commentCount:"+commentsCountString);
+				if(!commentsCountString.equals("添加评论")){
+					int commentCount = Integer.valueOf(commentsCountString.split(" ")[0]);
+					ans.setComentCount(commentCount);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				continue;
+			}	
 			Elements userInfoElements = answer.select(".zm-item-answer-author-wrap").first().children();
 			if(userInfoElements.size()>=2){
-				String userURL = userInfoElements.get(0).text();
+				String userURL = userInfoElements.get(0).attr("href");
 				ans.setUserURL(userURL);
 				String userName = userInfoElements.get(1).text();
-				ans.setUserURL(userName);
+				ans.setUserName(userName);
 				if(userInfoElements.size()>=3){
 					String userDesc = userInfoElements.get(2).text();
-					ans.setUserURL(userDesc);
+					ans.setUserInfo(userDesc);
 				}
 			}else{
 				ans.setUserName("匿名用户");
@@ -212,7 +216,7 @@ public class Zhihu_Util {
 			String jsonhtml = getQuestionJson(questionId,offset,count);
 			try {
 				String utfhtml = new String(jsonhtml.getBytes("unicode"),"utf-8");
-				System.out.println(jsonhtml);
+//				System.out.println(jsonhtml);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
