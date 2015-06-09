@@ -17,7 +17,7 @@ public class ConfigUtil {
 		}
 	}
 	public static String getProperty(String key){
-		return config.getProperty(key);
+		return config.getProperty(key)==null?"":config.getProperty(key);
 	}
 
 }

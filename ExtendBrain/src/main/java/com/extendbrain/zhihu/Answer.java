@@ -1,23 +1,53 @@
 package com.extendbrain.zhihu;
 
 public class Answer {
+	private int questionId = 0;
+	private int answerId = 0;
 	private int upCount = 0;
 	private int comentCount = 0;
 	private String answerText = "";
 	private String answerTime = "";
 	private String userName = "";
-	private String userInfo = "";
+	private String userInfo = "";//用户个人签名
 	private String userURL = "";
 	public Answer(){
 		
 	}
 	
-	public Answer(int upCount, int comentCount, String answerText, String anserTime) {
+
+
+	public Answer(int questionId, int answerId, int upCount, int comentCount,
+			String answerText, String answerTime, String userName,
+			String userInfo, String userURL) {
 		super();
+		this.questionId = questionId;
+		this.answerId = answerId;
 		this.upCount = upCount;
 		this.comentCount = comentCount;
 		this.answerText = answerText;
 		this.answerTime = answerTime;
+		this.userName = userName;
+		this.userInfo = userInfo;
+		this.userURL = userURL;
+	}
+
+
+	public int getQuestionId() {
+		return questionId;
+	}
+
+
+	public void setQuestionId(int questionId) {
+		this.questionId = questionId;
+	}
+
+
+	public int getAnswerId() {
+		return answerId;
+	}
+
+	public void setAnswerId(int answerId) {
+		this.answerId = answerId;
 	}
 
 	public int getUpCount() {
@@ -80,13 +110,19 @@ public class Answer {
 		this.userURL = userURL;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Answer [upCount=" + upCount + ", comentCount=" + comentCount
+		return "Answer [questionId=" + questionId + ", answerId=" + answerId
+				+ ", upCount=" + upCount + ", comentCount=" + comentCount
 				+ ", answerText=" + answerText + ", answerTime=" + answerTime
 				+ ", userName=" + userName + ", userInfo=" + userInfo
 				+ ", userURL=" + userURL + "]";
 	}
+
+
+
 
 
 	

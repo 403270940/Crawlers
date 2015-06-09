@@ -16,6 +16,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import com.extendbrain.beans.Content;
+import com.extendbrain.dao.Mysql_Answer;
 import com.extendbrain.protocol.Protocol;
 import com.extendbrain.protocol.ProtocolFactory;
 import com.extendbrain.utils.ConfigUtil;
@@ -118,19 +119,21 @@ public class Zhihu_Util {
 
 	
 	//zu-button-more
-	public static List<Answer> getAnswerFromQuestionPage(String html){
+	public static List<Answer> getAnswerFromQuestionPage(int questionId,String html){
 		List<Answer> answerList = new ArrayList<Answer>();
 		Document doc = Jsoup.parse(html);
 	
 		String answerClassName = ".zm-item-answer"; 
 		Elements answers = doc.select(answerClassName);
 		for(Element answer : answers ){
+			int id = Integer.valueOf(answer.attr("data-aid"));
 			Answer ans = new Answer();
-			int upCount = Integer.valueOf(answer.select(".up .count").first().text().trim());
+			int upCount = Integer.valueOf(answer.select(".up .count").first().text().trim().replace("K", "000"));
+			ans.setQuestionId(questionId);
 			ans.setUpCount(upCount);
-
+			ans.setAnswerId(id);
 			String commentsCountString = answer.select(".z-icon-comment").first().parent().text().trim();
-			System.out.println("commentCount:"+commentsCountString);
+//			System.out.println("commentCount:"+commentsCountString);
 			if(!commentsCountString.equals("添加评论")){
 				int commentCount = Integer.valueOf(commentsCountString.split(" ")[0]);
 				ans.setComentCount(commentCount);
@@ -192,7 +195,7 @@ public class Zhihu_Util {
 		List<Answer> answerList = new ArrayList<Answer>();
 		
 		String html = getQuestion(questionId);
-		List<Answer> resultList = getAnswerFromQuestionPage(html);
+		List<Answer> resultList = getAnswerFromQuestionPage(Integer.valueOf(questionId),html);
 		answerList.addAll(resultList);
 		int answerCount = getAnswerCount(html);
 		try {
@@ -215,7 +218,7 @@ public class Zhihu_Util {
 				e.printStackTrace();
 			}
 			
-			List<Answer> jsonList = getAnswerFromQuestionPage(jsonhtml);
+			List<Answer> jsonList = getAnswerFromQuestionPage(Integer.valueOf(questionId),jsonhtml);
 			answerList.addAll(jsonList);
 			try {
 				Thread.sleep(1000);
@@ -240,13 +243,14 @@ public class Zhihu_Util {
 		while(true){
 			try {
 			String line = sc.nextLine();	
-			System.out.println("line: " + line);
+//			System.out.println("line: " + line);
 			int intid = Integer.valueOf(line.trim());
 			String id = String.valueOf(intid);
 			if(id.length()!=8)
 				throw new Exception("The id Length should be 8");
 			//String html = getQuestion(id);
 			List<Answer> answerList = getALLAnswerOfQuestion(id);
+			Mysql_Answer.save(answerList);
 			System.out.println(answerList.size());
 //			getAllUserFromQuestionPage(html);
 //			System.out.println("id: " + id);
