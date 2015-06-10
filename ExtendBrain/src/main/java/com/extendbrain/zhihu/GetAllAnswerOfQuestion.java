@@ -12,7 +12,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import com.extendbrain.beans.Content;
@@ -24,23 +23,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-/*
- * more http://www.zhihu.com/node/QuestionAnswerListV2
- * post :
- * _xsrf	2f130b345475d92baa88075bec3a15ec
- * method	next
- * params	{"url_token":27621722,"pagesize":100,"offset":0}
- */
-public class Zhihu_Util {
+
+public class GetAllAnswerOfQuestion {
 	private static String BaseURL = "http://www.zhihu.com";
-	private static Protocol protocol = ProtocolFactory.getSingletonProtocol("http://");
-	public static String getQuestion(String id){
+	public static String getQuestion(Zhihu zhihu,int questionId){
 		String html = null;
 		String questionBaseUrl = "http://www.zhihu.com/question/";
-		String url = questionBaseUrl + id;
-		Content content = protocol.getOutput(url);
+		String url = questionBaseUrl + questionId;
+		Content content = zhihu.protocol.getOutput(url);
 		html = content.getContentString();
-		Login_Zhihu.updateXsrf(html);
+		zhihu.updateXsrf(html);
 		return html;
 	}
 	
@@ -75,13 +67,13 @@ public class Zhihu_Util {
 	 * offset:问题答案的偏移
 	 * count:获得问题的个数
 	 */
-	public static String getQuestionJson(String id,int offset,int count){
+	public static String getQuestionJson(Zhihu zhihu,int questionId,int offset,int count){
 		String url = "http://www.zhihu.com/node/QuestionAnswerListV2";
-		String xsrf = Login_Zhihu.xsrf;
+		String xsrf = zhihu.getXsrf();
 		String totalCount = String.valueOf(count);
 		String currentOffset = String.valueOf(offset);
 		String method = "next";
-		String params = "{\"url_token\":" + id + ",\"pagesize\":" + count + ",\"offset\":" + offset + "}";
+		String params = "{\"url_token\":" + questionId + ",\"pagesize\":" + count + ",\"offset\":" + offset + "}";
 		List<NameValuePair> paramsList = new ArrayList<NameValuePair>();
 		paramsList.add(new BasicNameValuePair("method", method));
 		paramsList.add(new BasicNameValuePair("params", params));
@@ -95,7 +87,7 @@ public class Zhihu_Util {
 		post.setHeader("Connection", "keep-alive");
 		post.setHeader("Host", "www.zhihu.com");
 		post.setHeader("Pragma", "no-cache");
-		post.setHeader("Referer", "http://www.zhihu.com/question/" + id);
+		post.setHeader("Referer", "http://www.zhihu.com/question/" + questionId);
 		post.setHeader("X-Requested-With", "XMLHttpRequest");
 		try {
 			UrlEncodedFormEntity paramsEntity = new UrlEncodedFormEntity(paramsList,"utf-8");
@@ -104,7 +96,7 @@ public class Zhihu_Util {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Content content = protocol.postOutput(post);
+		Content content = zhihu.protocol.postOutput(post);
 		String html = content.getContentString();
 		html = processJsonResult(html);
 		return html;
@@ -168,38 +160,12 @@ public class Zhihu_Util {
 		return answerList;
 	}
 	
-	public static void getAllUserFromQuestionPage(String html){
-		Document doc = Jsoup.parse(html);
-		
-		String answerClassName = "div .zm-item-answer";
-		Elements answers = doc.select(answerClassName);
-		
-		String className = ".answer-head";
-		Elements elements = doc.select(className);
-		//up count   	div .zm-item-answer .up .count
-		//commentcount 	div .zm-item-answer .z-icon-comment text()
-		//userURL   	div .zm-item-answer .zm-item-answer-author-wrap [0]
-		//username   	div .zm-item-answer .zm-item-answer-author-wrap [1]
-		//userdesc   	div .zm-item-answer .zm-item-answer-author-wrap [2]
-		//answer     	div .zm-item-answer .zm-editable-content  text()
-		//time       	div .zm-item-answer .answer-date-link-wrap a text()
-		for(Element element : elements){
-			Elements elementss = element.select("h3.zm-item-answer-author-wrap a");
-			if(elementss.size() >= 2){
-				String userURL = BaseURL + elementss.attr("href");
-				String userName = elementss.get(1).text();
-				System.out.println(userURL);
-				System.out.println(userName);
-			}
-		}
-	}
 	
-	public static List<Answer> getALLAnswerOfQuestion(String questionId){
-		
+	public static List<Answer> getALLAnswerOfQuestion(Zhihu zhihu,int questionId){
+
 		List<Answer> answerList = new ArrayList<Answer>();
-		
-		String html = getQuestion(questionId);
-		List<Answer> resultList = getAnswerFromQuestionPage(Integer.valueOf(questionId),html);
+		String html = getQuestion(zhihu,questionId);
+		List<Answer> resultList = getAnswerFromQuestionPage(questionId,html);
 		answerList.addAll(resultList);
 		int answerCount = getAnswerCount(html);
 		try {
@@ -209,20 +175,11 @@ public class Zhihu_Util {
 			e1.printStackTrace();
 		}
 		
-		
 		for(int i = 50; i < answerCount; i=i+50){
 			int offset = i;
 			int count = (answerCount - i) > 50? 50 : answerCount - i;
-			String jsonhtml = getQuestionJson(questionId,offset,count);
-			try {
-				String utfhtml = new String(jsonhtml.getBytes("unicode"),"utf-8");
-//				System.out.println(jsonhtml);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			List<Answer> jsonList = getAnswerFromQuestionPage(Integer.valueOf(questionId),jsonhtml);
+			String jsonhtml = getQuestionJson(zhihu,questionId,offset,count);
+			List<Answer> jsonList = getAnswerFromQuestionPage(questionId,jsonhtml);
 			answerList.addAll(jsonList);
 			try {
 				Thread.sleep(1000);
@@ -235,38 +192,4 @@ public class Zhihu_Util {
 	}
 	
 	
-	public static void main(String[] args) {
-		String email = ConfigUtil.getProperty("zhihu_userName");
-		String password = ConfigUtil.getProperty("zhihu_password");
-		Login_Zhihu.login(email,password);
-//		String questionId = "27621722";
-//		String questionHtml = getQuestion(questionId);
-//		getAllUserFromQuestionPage(questionHtml);
-		Scanner sc = new Scanner(System.in);
-
-		while(true){
-			try {
-			String line = sc.nextLine();	
-//			System.out.println("line: " + line);
-			int intid = Integer.valueOf(line.trim());
-			String id = String.valueOf(intid);
-			if(id.length()!=8)
-				throw new Exception("The id Length should be 8");
-			//String html = getQuestion(id);
-			List<Answer> answerList = getALLAnswerOfQuestion(id);
-			Mysql_Answer.save(answerList);
-			System.out.println(answerList.size());
-//			getAllUserFromQuestionPage(html);
-//			System.out.println("id: " + id);
-//			Thread.sleep(1000);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		//System.out.println(getQuestion(questionId));
-//		String result = getQuestionJson(questionId);
-//		System.out.println(result);
-		
-	}
 }
