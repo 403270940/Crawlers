@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.extendbrain.caipiao.SSQ;
@@ -29,19 +31,20 @@ public class Mysql_Answer {
 		} 
 	}
 	//create table answer(id int not null primary key auto_increment,questionid int not null,answerid int not null,upcount int not null,commentcount int not null,answertext text,answertime varchar(15),username varchar(10),userinfo varchar(100),userurl varchar(100));
-	public static void createTable(){
+	public static void createTable(String tableName){
 		PreparedStatement preparedStatement = null;
-		String sql = "create table answer(id int not null primary key auto_increment,"
+		String sql = "create table if not exists "+tableName+"(id int not null primary key auto_increment,"
 				+ "questionid int not null,"
 				+ " answerid int not null, "
 				+ "upcount int not null,"
 				+ "commentcount int not null,"
 				+ "answertext text,"
 				+ "answertime varchar(15),"
-				+ "username varchar(10),"
+				+ "username varchar(50),"
 				+ "userinfo varchar(100),"
 				+ "userurl varchar(100)) default charset=utf8;";
 		//CREATE TABLE `proxy` (   `id` int(11) NOT NULL AUTO_INCREMENT,   `ip` varchar(20) DEFAULT NULL,   `port` varchar(5) DEFAULT NULL,   `type` varchar(20) DEFAULT NULL,   `location` varchar(50) DEFAULT NULL,   PRIMARY KEY (`id`) );
+		System.out.println(sql);
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.execute();
@@ -65,10 +68,18 @@ public class Mysql_Answer {
 		}
 	}
 	
-	
+	private static String getTableName(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd");
+		Date date = new Date();
+		String dt = df.format(date);
+		String tableName = "answer_"+dt;
+		return tableName;
+	}
 	public static void save(List<Answer> answerList){
+		String tableName = getTableName();
+		createTable(tableName);
 		PreparedStatement preparedStatement = null;
-		String sql = "insert into answer(questionid,answerid,upcount,commentcount,answertext,answertime,username,userinfo,userurl) values(?,?,?,?,?,?,?,?,?);";
+		String sql = "insert into "+tableName+"(questionid,answerid,upcount,commentcount,answertext,answertime,username,userinfo,userurl) values(?,?,?,?,?,?,?,?,?);";
 		try {
 			for(int i =answerList.size()-1;i>=0;i--){
 				Answer answer = answerList.get(i);
@@ -98,8 +109,10 @@ public class Mysql_Answer {
 	 * id,url,status,fetchtime,fetchinterval,lastmodifiedtime,score
 	 */
 	public static void save(Answer answer){
+		String tableName = getTableName();
+		createTable(tableName);
 		PreparedStatement preparedStatement = null;
-		String sql = "insert into answer(questionid,answerid,upcount,commentcount,answertext,answertime,username,userinfo,userurl) values(?,?,?,?,?,?,?,?,?);";
+		String sql = "insert into "+tableName+"(questionid,answerid,upcount,commentcount,answertext,answertime,username,userinfo,userurl) values(?,?,?,?,?,?,?,?,?);";
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, answer.getQuestionId());

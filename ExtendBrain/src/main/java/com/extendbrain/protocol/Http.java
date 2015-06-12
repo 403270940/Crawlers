@@ -1,6 +1,5 @@
 package com.extendbrain.protocol;
 
-import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +9,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.GzipDecompressingEntity;
@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.params.ConnRouteParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -33,8 +34,9 @@ import com.extendbrain.beans.Content;
 import com.extendbrain.beans.URLDatum;
 
 public class Http implements Protocol{
-	public HttpClient httpClient;
+	private static HttpClient httpClient;
 	private static SSLSocketFactory ssf = null;
+	private final String defaultUserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0";
 	static{
         try {
         	SSLContext ctx = SSLContext.getInstance("SSL");
@@ -77,7 +79,7 @@ public class Http implements Protocol{
 		HttpConnectionParams.setConnectionTimeout(params, 60000);
 		HttpConnectionParams.setSoTimeout(params, 60000);
 		HttpClientParams.setCookiePolicy(params, CookiePolicy.BROWSER_COMPATIBILITY);
-		params.setParameter(CoreProtocolPNames.USER_AGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0");
+		params.setParameter(CoreProtocolPNames.USER_AGENT, defaultUserAgent);
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 		schemeRegistry.register(new Scheme("https", 443, ssf));
@@ -86,7 +88,15 @@ public class Http implements Protocol{
 		httpClient = new DefaultHttpClient(cm, params);
 	}
 	
+	public void setUserAgent(String userAgent){
+		httpClient.getParams().setParameter(CoreProtocolPNames.USER_AGENT, userAgent);
+	}
 	
+	public boolean setProxy(String hostname, int port){
+		HttpHost host = new HttpHost(hostname, port);
+		httpClient.getParams().setParameter(ConnRouteParams.DEFAULT_PROXY, host);
+		return true;
+	}
 	
 	public Content getOutput(String url) {
 		// TODO Auto-generated method stub
@@ -95,8 +105,11 @@ public class Http implements Protocol{
 		try {
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(httpGet);
+			boolean ifGZip = false;
 			HttpEntity entity = httpResponse.getEntity();
-			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			Header encodingHeader = httpResponse.getEntity().getContentEncoding();
+			if(encodingHeader != null)
+				ifGZip = encodingHeader.getValue().contains("gzip");
 			if(ifGZip)
 				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
@@ -120,8 +133,11 @@ public class Http implements Protocol{
 		try {
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(httpGet);
+			boolean ifGZip = false;
 			HttpEntity entity = httpResponse.getEntity();
-			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			Header encodingHeader = httpResponse.getEntity().getContentEncoding();
+			if(encodingHeader != null)
+				ifGZip = encodingHeader.getValue().contains("gzip");
 			if(ifGZip)
 				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
@@ -170,8 +186,11 @@ public class Http implements Protocol{
 		try {
 			content = new Content();
 			HttpResponse httpResponse = httpClient.execute(post);
+			boolean ifGZip = false;
 			HttpEntity entity = httpResponse.getEntity();
-			boolean ifGZip = httpResponse.getEntity().getContentEncoding().getValue().contains("gzip");
+			Header encodingHeader = httpResponse.getEntity().getContentEncoding();
+			if(encodingHeader != null)
+				ifGZip = encodingHeader.getValue().contains("gzip");
 			if(ifGZip)
 				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);

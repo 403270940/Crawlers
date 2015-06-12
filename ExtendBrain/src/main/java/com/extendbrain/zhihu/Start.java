@@ -3,6 +3,8 @@ package com.extendbrain.zhihu;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 import com.extendbrain.dao.Mysql_Answer;
 import com.extendbrain.utils.ConfigUtil;
 
@@ -27,6 +29,7 @@ public class Start {
 			if(id.length()!=8)
 				throw new Exception("The id Length should be 8");
 			List<Answer> answerList = zhihu.getAllAnswerOfQuestion(questionId);
+			Mysql_Answer.save(answerList);
 			System.out.println(answerList.size());
 			} catch (Exception e) {
 				e.printStackTrace();

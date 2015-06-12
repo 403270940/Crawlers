@@ -118,7 +118,7 @@ public class GetAllAnswerOfQuestion {
 		String answerClassName = ".zm-item-answer"; 
 		Elements answers = doc.select(answerClassName);
 		for(Element answer : answers ){
-			int id = Integer.valueOf(answer.attr("data-aid"));
+			int id = Integer.valueOf(answer.attr("data-aid").trim());
 			Answer ans = new Answer();
 			try {
 				int upCount = Integer.valueOf(answer.select(".up .count").first().text().trim().replace("K", "000"));
@@ -137,21 +137,21 @@ public class GetAllAnswerOfQuestion {
 			}	
 			Elements userInfoElements = answer.select(".zm-item-answer-author-wrap").first().children();
 			if(userInfoElements.size()>=2){
-				String userURL = userInfoElements.get(0).attr("href");
+				String userURL = userInfoElements.get(0).attr("href").trim();
 				ans.setUserURL(userURL);
-				String userName = userInfoElements.get(1).text();
+				String userName = userInfoElements.get(1).text().trim();
 				ans.setUserName(userName);
 				if(userInfoElements.size()>=3){
-					String userDesc = userInfoElements.get(2).text();
+					String userDesc = userInfoElements.get(2).text().trim();
 					ans.setUserInfo(userDesc);
 				}
 			}else{
 				ans.setUserName("匿名用户");
 			}
 			
-			String answerText = answer.select(".zm-editable-content").first().text();
+			String answerText = answer.select(".zm-editable-content").first().text().trim();
 			ans.setAnswerText(answerText);
-			String answerTime = answer.select(".answer-date-link-wrap a").first().text();
+			String answerTime = answer.select(".answer-date-link-wrap a").first().text().trim();
 			ans.setAnswerTime(answerTime);
 			
 			System.out.println(ans);

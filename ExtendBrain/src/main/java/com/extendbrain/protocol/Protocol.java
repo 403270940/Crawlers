@@ -11,4 +11,6 @@ public interface Protocol {
 	public Content getOutput(HttpGet get);
 	public Content getOutput(String url,URLDatum datum);
 	public Content postOutput(HttpPost httpPost);
+	public boolean setProxy(String hostname, int port);
+	public void setUserAgent(String userAgent);
 }

@@ -10,6 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +19,7 @@ import org.jsoup.select.Elements;
 import com.extendbrain.beans.Content;
 import com.extendbrain.protocol.Protocol;
 import com.extendbrain.protocol.ProtocolFactory;
+import com.extendbrain.utils.TimeUtil;
 import com.extendbrain.zhihu.exception.ZhihuLoginException;
 
 public class Zhihu implements ZhihuBase{
@@ -26,7 +28,7 @@ public class Zhihu implements ZhihuBase{
 	private boolean ifLogin = false;
 	private static Zhihu instance = null;
 	private String xsrf = null;
-	
+	private Logger logger = Logger.getLogger(this.getClass());
 	
 	
 	public static ZhihuBase getInstance(){
@@ -41,6 +43,7 @@ public class Zhihu implements ZhihuBase{
 	
 	public boolean login(String userName, String password) throws Exception {
 		// TODO Auto-generated method stub
+		logger.info("UserName:" + userName +" PassWord:"+password);
 		protocol = ProtocolFactory.getSingletonProtocol("http://");	
 		boolean ifInitedXsrf = initXsrf();
 		if(!ifInitedXsrf){
@@ -89,6 +92,7 @@ public class Zhihu implements ZhihuBase{
 		
 		if(resultCode.equals("0")){
 			System.out.println("登录成功");	
+			logger.info("登陆成功 ");
 			return true;
 		}else if(resultCode == null){
 			throw new ZhihuLoginException("登录失败!返回结果:"+result);
@@ -104,8 +108,10 @@ public class Zhihu implements ZhihuBase{
 
 	public List<Answer> getAllAnswerOfQuestion(int questionId) {
 		// TODO Auto-generated method stub
-		
-		return GetAllAnswerOfQuestion.getALLAnswerOfQuestion(this, questionId);
+		logger.info("Get all quesiton of id " + questionId);
+		List<Answer> answerList = GetAllAnswerOfQuestion.getALLAnswerOfQuestion(this, questionId);
+		logger.info("The count of answer of " + questionId + "is " + answerList.size());
+		return answerList;
 	}
 
 	public boolean upAnswer(int questionId,int answerId) {
