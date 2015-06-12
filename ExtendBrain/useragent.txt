@@ -1,0 +1,97 @@
+﻿chrome
+Mozilla/5.0 (Windows NT 5.2) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30
+
+Firefox
+Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0
+
+IE8
+Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET4.0E; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET4.0C)
+
+IE7
+Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET4.0E; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET4.0C)
+
+IE6
+Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)
+
+IE9
+Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)
+
+Opera
+Opera/9.80 (Windows NT 5.1; U; zh-cn) Presto/2.9.168 Version/11.50
+
+360 safe Browser in IE6
+Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+
+360 safe Browser in IE8
+Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET4.0E; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET4.0C)
+
+Safari
+Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1
+
+Maxthon
+Mozilla/5.0 (Windows; U; Windows NT 5.1; ) AppleWebKit/534.12 (KHTML, like Gecko) Maxthon/3.0 Safari/534.12
+
+TheWorld
+Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; TheWorld)
+
+
+
+浏览器版本:                          user-agent标识信息:  
+Internet Explorer 7                 (Windows Vista) Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)      
+Netscape 4.8 (Windows Vista)        Mozilla/4.8 [en] (Windows NT 6.0; U)    
+Opera 9.2 (Windows Vista)           Opera/9.20 (Windows NT 6.0; U; en)     
+MSIE 6 (Win XP)                     Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)  
+MSIE 5.5 (Win 2000)                 Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0 )  
+MSIE 5.5 (Win ME)                   Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90)  
+Avant Browser 1.2                   Avant Browser/1.2.789rel1 (http://www.avantbrowser.com)    
+Opera 8.0 (Win 2000)                Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; en) Opera 8.0  
+Opera 7.51 (Win XP)                 Opera/7.51 (Windows NT 5.1; U) [en]     
+Opera 7.5 (Win XP)                  Opera/7.50 (Windows XP; U)        
+Opera 7.5 (Win ME)                  Opera/7.50 (Windows ME; U) [en]    
+Multizilla 1.6 (Win xp)             Mozilla/5.0 (Windows; U; Windows XP) Gecko MultiZilla/1.6.1.0a  
+Netscape 7.1 (Win 98)               Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.4) Gecko Netscape/7.1 (ax)  
+Netscape 4.8 (Win XP)               Mozilla/4.8 [en] (Windows NT 5.1; U)  
+Netscape 3.01 gold (Win 95)         Mozilla/3.01Gold (Win95; I)  
+Netscape 2.02 (Win 95)              Mozilla/2.02E (Win95; U)  
+Googlebot 2.1 (New version)         Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)  
+Googlebot 2.1 (Older Version)       Googlebot/2.1 (+http://www.googlebot.com/bot.html)  
+Msnbot 1.0 (current version)        msnbot/1.0 (+http://search.msn.com/msnbot.htm)  
+Msnbot 0.11 (beta version)          msnbot/0.11 (+http://search.msn.com/msnbot.htm)  
+Yahoo Slurp                         Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)  
+Ask Jeeves/Teoma                    Mozilla/2.0 (compatible; Ask Jeeves/Teoma)  
+Safari 125.8 (Mac OSX)              Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/125.2 (KHTML, like Gecko) Safari/125.8  
+Safari 85 (Mac OSX)                 Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/125.2 (KHTML, like Gecko) Safari/85.8  
+MSIE 5.15 (Mac OS 9)                Mozilla/4.0 (compatible; MSIE 5.15; Mac_PowerPC)  
+Firefox 0.9 (Mac OSX )              Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.7a) Gecko/20040614 Firefox/0.9.0+  
+Omniweb563 (Mac OSX)                Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US) AppleWebKit/125.4 (KHTML, like Gecko, Safari) OmniWeb/v563.15  
+Epiphany 1.2 (Linux)                Mozilla/5.0 (X11; U; Linux; i686; en-US; rv:1.6) Gecko Epiphany/1.2.5  
+Epiphany 1.4 (Ubuntu)               Mozilla/5.0 (X11; U; Linux i586; en-US; rv:1.7.3) Gecko/20040924 Epiphany/1.4.4 (Ubuntu)  
+Firefox 0.8 (Linux)                 Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.6) Gecko/20040614 Firefox/0.8  
+Galeon 1.3 (Linux)                  Mozilla/5.0 (X11; U; Linux; i686; en-US; rv:1.6) Gecko Galeon/1.3.14  
+Konqueror 3 rc4 (Linux)             Konqueror/3.0-rc4; (Konqueror/3.0-rc4; i686 Linux;;datecode)  
+Konqueror 3.3 (Gentoo)              Mozilla/5.0 (compatible; Konqueror/3.3; Linux 2.6.8-gentoo-r3; X11;  
+Mozilla 1.6 (Debian)                Mozilla/5.0 (X11; U; Linux; i686; en-US; rv:1.6) Gecko Debian/1.6-7  
+Opera 7.23 (Linux)                  MSIE (MSIE 6.0; X11; Linux; i686) Opera 7.23  
+ELinks 0.9.3 (Kanotix)              ELinks/0.9.3 (textmode; Linux 2.6.9-kanotix-8 i686; 127x41)  
+Elinks 0.4pre5 (Linux)              ELinks (0.4pre5; Linux 2.6.10-ac7 i686; 80x33)  
+Links 2.1 (Linux)                   Links (2.1pre15; Linux 2.4.26 i686; 158x61)  
+Links 0.9.1 (Linux)                 Links/0.9.1 (Linux 2.4.24; i386;)  
+Lynx 2.8.5rel.1 (Linux)             Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/0.8.12  
+w3m 0.5.1 (Linux)                   w3m/0.5.1  
+Links 2.1 (FreeBSD)                 Links (2.1pre15; FreeBSD 5.3-RELEASE i386; 196x84)  
+Mozilla 1.7 (FreeBSD)               Mozilla/5.0 (X11; U; FreeBSD; i386; en-US; rv:1.7) Gecko  
+Netscape 4.77 (Irix)                Mozilla/4.77 [en] (X11; I; IRIX;64 6.5 IP30)  
+Netscape 4.8 (SunOS)                Mozilla/4.8 [en] (X11; U; SunOS; 5.7 sun4u)  
+Net Positive 2.1 (BeOS)             Mozilla/3.0 (compatible; NetPositive/2.1.1; BeOS)  
+download demon                      Download Demon/3.5.0.11  
+Email Wolf                          EmailWolf 1.00  
+grub client                         grub-client-1.5.3; (grub-client-1.5.3; Crawl your own stuff with http://grub.org)  
+gulperbot                           Gulper Web Bot 0.2.4 (www.ecsl.cs.sunysb.edu/~maxim/cgi-bin/Link/GulperBot)  
+ms url control                      Microsoft URL Control - 6.00.8862  
+omni web                            OmniWeb/2.7-beta-3 OWF/1.0  
+winHTTP                             SearchExpress
+
+
+
+
+
