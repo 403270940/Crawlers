@@ -40,7 +40,7 @@ public class Mysql_Content {
 				byte[] con = rs.getBytes("content");
 				String contentType = rs.getString("contentType");
 				String contentEncoding = rs.getString("contentEncoding");
-				Content content = new Content(url,con,contentType,contentEncoding);
+				Content content = new Content(url,con,contentType,contentEncoding,200);
 				contentList.add(content);
 			}
 		} catch (Exception e) {

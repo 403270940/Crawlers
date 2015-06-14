@@ -113,6 +113,7 @@ public class Http implements Protocol{
 			if(ifGZip)
 				entity = new GzipDecompressingEntity(entity);
 			byte[] contents = EntityUtils.toByteArray(entity);
+			content.setResultCode(httpResponse.getStatusLine().getStatusCode());
 			content.setUrl(url);
 			content.setContent(contents);
 			content.setContentType(entity.getContentType().getValue());

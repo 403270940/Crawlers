@@ -7,15 +7,21 @@ public class Content {
 	private byte[] content;
 	private String contentType = "text/html;charset=utf-8";
 	private String charSet = "";
+	private int resultCode = 200;
 	public Content(){
 		
 	}
-	public Content(String url,byte[] content,String contentType,String contentEncoding){
+	
+	public Content(String url, byte[] content, String contentType,
+			String charSet, int resultCode) {
+		super();
 		this.url = url;
 		this.content = content;
 		this.contentType = contentType;
-		this.charSet = contentEncoding;
+		this.charSet = charSet;
+		this.resultCode = resultCode;
 	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -50,5 +56,13 @@ public class Content {
 			e.printStackTrace();
 		}
 		return contentString;
+	}
+
+	public int getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(int resultCode) {
+		this.resultCode = resultCode;
 	}
 }
