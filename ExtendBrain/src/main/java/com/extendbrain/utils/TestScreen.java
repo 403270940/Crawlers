@@ -18,10 +18,9 @@ public class TestScreen {
 		Screen screen = new Screen();
 		screen.setWidth(1920);
 		screen.setHeight(1280);
-		webClient.setDefaultScreen(screen);
+//		webClient.setDefaultScreen(screen);
 		try {
 //			webClient.getOptions().setJavaScriptEnabled(false);
-			JavaScriptEngine jsEngine = webClient.getJavaScriptEngine();
 			HtmlPage page = webClient.getPage(url);
 			String result = page.asXml();
 			System.out.println(result);

@@ -98,7 +98,7 @@ public class Http implements Protocol{
 		return true;
 	}
 	
-	public Content getOutput(String url) {
+	public Content getOutput(String url){
 		// TODO Auto-generated method stub
 		HttpGet httpGet = new HttpGet(url);
 		Content content = null;
@@ -123,12 +123,12 @@ public class Http implements Protocol{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			content = null;
-			e.printStackTrace();
+
 		}
 		return content;
 	}
 	
-	public Content getOutput(HttpGet httpGet) {
+	public Content getOutput(HttpGet httpGet){
 		// TODO Auto-generated method stub
 		Content content = null;
 		try {
@@ -156,7 +156,7 @@ public class Http implements Protocol{
 		return content;
 	}
 	
-	public Content getOutput(String url, URLDatum datum) {
+	public Content getOutput(String url, URLDatum datum){
 		// TODO Auto-generated method stub
 		HttpGet httpGet = new HttpGet(url);
 		Content content = null;
