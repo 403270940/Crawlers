@@ -13,4 +13,5 @@ public interface Protocol {
 	public Content postOutput(HttpPost httpPost);
 	public boolean setProxy(String hostname, int port);
 	public void setUserAgent(String userAgent);
+	public void setCookie(String cookie);
 }

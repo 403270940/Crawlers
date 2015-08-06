@@ -11,19 +11,24 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.params.ConnRouteParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
@@ -96,6 +101,19 @@ public class Http implements Protocol{
 		HttpHost host = new HttpHost(hostname, port);
 		httpClient.getParams().setParameter(ConnRouteParams.DEFAULT_PROXY, host);
 		return true;
+	}
+	
+	public void setCookie(String cookie){
+		CookieStore cookieStore = new BasicCookieStore();
+		String[] cookies = cookie.split(";");
+		for(String cook : cookies){
+			String key = cook.split("=")[0];
+			String value = cook.split("=")[1];
+			BasicClientCookie cookie2 = new BasicClientCookie(key, value);
+			cookieStore.addCookie(cookie2);
+		}
+		HttpClientContext context = HttpClientContext.create();
+		context.setCookieStore(cookieStore);
 	}
 	
 	public Content getOutput(String url){

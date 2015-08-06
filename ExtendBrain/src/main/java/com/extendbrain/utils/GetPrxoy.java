@@ -81,7 +81,8 @@ public class GetPrxoy {
 		for(ProxyItem proxyItem : proxyList){
 			try {
 				wb.getOptions().setTimeout(6000);
-				HtmlPage page = wb.getPage("http://www.baidu.com");
+				wb.getOptions().setJavaScriptEnabled(false);
+				HtmlPage page = wb.getPage("http://www.sogou.com/");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -29,8 +29,28 @@ public class TestRegex {
 		if (m2.find())
 			System.out.println(m2.group());
 	}
+	
+	public static void test(){
+		String IMEIReg = "^\\d{15}$";
+		String IMEI = "355065053311001";
+		
+		String IMSIReg = "^4600[0-3]{1}\\d{10}$";
+		String IMSI = "460002289000168";
+		
+		String MACReg = "^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$";
+		String MAC = "F2:D2:E5:E8:03:F6";
+		
+		Pattern pattern = Pattern.compile(IMSIReg);
+		Matcher matcher = pattern.matcher(IMSI);
+		if(matcher.find())
+			System.out.println("True");
+		else 
+			System.out.println("False");
+	}
+	
+	
 	public static void main(String[] args) {
-		testResultCode();
+		test();
 		
 	}
 }

@@ -21,6 +21,7 @@ public interface ZhihuBase {
 	
 	public abstract Object getUserInfoById(String userId);
 	
+	public void setCookie(String cookie);
 	
 	
 }

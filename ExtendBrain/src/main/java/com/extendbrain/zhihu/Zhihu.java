@@ -41,6 +41,14 @@ public class Zhihu implements ZhihuBase{
 		return instance;
 	}
 	
+	public  void addCookie(){
+		protocol = ProtocolFactory.getSingletonProtocol("http://");	
+		
+	}
+	public void setCookie(String cookie){
+		protocol = ProtocolFactory.getSingletonProtocol("http://");
+		protocol.setCookie(cookie);
+	}
 	public boolean login(String userName, String password) throws Exception {
 		// TODO Auto-generated method stub
 		logger.info("UserName:" + userName +" PassWord:"+password);
@@ -49,12 +57,13 @@ public class Zhihu implements ZhihuBase{
 		if(!ifInitedXsrf){
 			throw new ZhihuLoginException("Login failed!Can not found xsrf label in the login page!");
 		}
-		String rememberMe = "y";	
-		HttpPost post = new HttpPost("http://www.zhihu.com/login");
+		String rememberMe = "true";	
+		HttpPost post = new HttpPost("http://www.zhihu.com/login/email");
 		post.setHeader("Accept", "*/*");
 		post.setHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
 		post.setHeader("Cache-Control", "no-cache");
 		post.setHeader("Connection", "keep-alive");
+		post.setHeader("Accept-Encoding", "gzip, deflate");
 		post.setHeader("Host", "www.zhihu.com");
 		post.setHeader("Pragma", "no-cache");
 		post.setHeader("Referer", "http://www.zhihu.com/");

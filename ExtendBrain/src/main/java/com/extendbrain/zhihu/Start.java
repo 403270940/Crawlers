@@ -1,9 +1,11 @@
 package com.extendbrain.zhihu;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Scanner;
-
-import org.apache.log4j.Logger;
 
 import com.extendbrain.dao.Mysql_Answer;
 import com.extendbrain.utils.ConfigUtil;
@@ -15,7 +17,16 @@ public class Start {
 		String password = ConfigUtil.getProperty("zhihu_password");
 		ZhihuBase zhihu = Zhihu.getInstance();
 		try {
-			zhihu.login(email, password);
+			File file = new File("src/main/java/cookie.txt");
+			FileInputStream fio = new FileInputStream(file);
+			BufferedReader bReader = new BufferedReader(new InputStreamReader(fio));
+			String cookie = "";
+			String line = "";
+			while((line = bReader.readLine())!=null){
+				cookie += line;
+			}
+			zhihu.setCookie(cookie);
+//			zhihu.login(email, password);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
